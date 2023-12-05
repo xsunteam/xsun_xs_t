@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up and Log In</title>
+    <style>
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #000;
+    margin: 0;
+    display: flex;
+    flex-direction: column; /* تحديد اتجاه العناصر ليكون عموديًا */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #fff;
+}
+
+/* إضافة قاعدة لتصميم العنوان */
+h1 {
+    font-size: 2em; /* زيادة حجم الخط */
+    margin-bottom: 20px; /* زيادة المسافة بين العنوان والنموذج */
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10vh 0;
+}
+
+.form {
+    text-align: left;
+    width: 90%;
+    max-width: 600px;
+    border: 2px solid #ccc;
+    padding: 30px;
+    background-color: #000;
+    border-radius: 15px;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* تحسينات على الأزرار وحقول الإدخال */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+button {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+button {
+    background-color: #ff3f3f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.5em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #e53636;
+}
+
+/* تحسينات على تنسيق الرسائل */
+#exist-message,
+#new-password-message {
+    margin-top: 15px;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Sign Up Form -->
+           <p2>WELCOME <p2>
+    <div class="form-container" id="signup-container">
+        <div class="form" id="signup-form">
+            <h2>Sign Up</h2>
+            <input type="email" id="signup-email" placeholder="Email" required><br><br>
+            <input type="password" id="signup-password" placeholder="Password" required><br><br>
+            <input type="password" id="confirm-password" placeholder="Confirm Password" required><br><br>
+            <input type="text" id="signup-invitation-code" placeholder="Invitation Code (optional)"><br><br>
+            <button onclick="saveUserData()">Sign Up</button>
+            <label class="toggle-label" for="toggle-form">Already have an account? Login</label>
+            <div id="exist-message">Exist</div>
+            <div id="new-password-message" style="display: none;"></div>
+            <div id="forget-password-container" style="display: none;">
+                <input type="email" id="forget-password-email" placeholder="Email" required><br><br>
+                <button onclick="sendNewPassword()">Send New Password</button>
+                <br>
+                <a id="forget-password-link" </a>
+            </div>
+            <div id="forget-password" onclick="showForgetPassword()">Forget Password?</div>
+        </div>
+    </div>
+
+    <!-- Log In Form -->
+    <div class="form-container" id="login-container" style="display:none">
+        <div class="form" id="login-form">
+            <h2>Log In</h2>
+            <input type="email" id="login-email" placeholder="Email" required><br><br>
+            <input type="password" id="login-password" placeholder="Password" required><br><br>
+            <button onclick="login()">Log In</button>
+           
+           
+            <label class="toggle-label" for="toggle-form">Don't have an account? Create one</label>
+        </div>
+    </div>
+
+             <input type="checkbox" id="toggle-form" class="toggle-btn" onclick="toggleForms()">
+  <input type="checkbox" id="toggle-form" class="toggle-btn" onclick="toggleForms()">
+
+           
+  
+    <script>
+        function toggleForms() {
+            const signupContainer = document.getElementById("signup-container");
+            const loginContainer = document.getElementById("login-container");
+
+            if (signupContainer.style.display === "none") {
+                signupContainer.style.display = "flex";
+                loginContainer.style.display = "none";
+            } else {
+                signupContainer.style.display = "none";
+                loginContainer.style.display = "flex";
+            }
+        }
+
+        function saveUserData() {
+            const email = document.getElementById("signup-email").value;
+            const password = document.getElementById("signup-password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            if (password.length < 8) {
+                alert("Password should be at least 8 characters long.");
+                return;
+            }
+
+            if (localStorage.getItem(email) !== null) {
+                document.getElementById("exist-message").style.display = "block";
+                return;
+            }
+
+            localStorage.setItem(email, password);
+            alert("Account created successfully!");
+        }
+
+        function login() {
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+
+            if (localStorage.getItem(email) === null) {
+                alert("Email does not exist.");
+                return;
+            }
+
+            const savedPassword = localStorage.getItem(email);
+
+            if (password !== savedPassword) {
+                alert("Incorrect password.");
+                return;
+            }
+
+            window.location.href = "https://xsunteam.github.io/xs_xsunteam/";
+        }
+
+        function redirectLogin() {
+            const loginContainer = document.getElementById("login-container");
+            const forgetPasswordContainer = document.getElementById("forget-password-container");
+
+            loginContainer.style.display = "flex";
+            forgetPasswordContainer.style.display = "none";
+        }
+
+        function showForgetPassword() {
+            const loginContainer = document.getElementById("login-container");
+            const forgetPasswordContainer = document.getElementById("forget-password-container");
+
+            loginContainer.style.display = "none";
+            forgetPasswordContainer.style.display = "flex";
+        }
+
+        function sendNewPassword() {
+            const email = document.getElementById("forget-password-email").value;
+
+            if (localStorage.getItem(email) === null) {
+                alert("البريد الإلكتروني غير موجود.");
+                return;
+            }
+
+            const newPassword = generateRandomPassword();
+            localStorage.setItem(email, newPassword);
+
+            // عرض رسالة كلمة السر الجديدة
+            document.getElementById("new-password-message").innerText = `Your new password is: ${newPassword}`;
+            document.getElementById("new-password-message").style.display = "block";
+
+            // إضافة زر "Hide" للنافذة
+            document.getElementById("new-password-message").innerHTML += '<button onclick="hideNewPassword()">Hide</button>';
+
+            // تأخير إخفاء رسالة كلمة السر الجديدة بعد فترة زمنية (هنا 5 ثواني)
+            setTimeout(() => {
+                document.getElementById("new-password-message").style.display = "none";
+            }, 5000);
+
+            // إخفاء نافذة نسيان كلمة السر
+            hideForgetPassword();
+        }
+
+        // دالة لإخفاء رسالة كلمة السر الجديدة
+        function hideNewPassword() {
+            document.getElementById("new-password-message").style.display = "none";
+        }
+
+        function hideForgetPassword() {
+            const loginContainer = document.getElementById("login-container");
+            const forgetPasswordContainer = document.getElementById("forget-password-container");
+
+            loginContainer.style.display = "flex";
+            forgetPasswordContainer.style.display = "none";
+        }
+
+        function generateRandomPassword() {
+            const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let newPassword = "";
+
+            for (let i = 0; i < 8; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                newPassword += characters.charAt(randomIndex);
+            }
+
+            return newPassword;
+        }
+    </script>
+</body>
+</html>
